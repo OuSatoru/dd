@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
 export function login(data) {
+  console.log(process.env.VUE_APP_BASE_API)
   return request({
     url: '/user/login',
     method: 'post',
