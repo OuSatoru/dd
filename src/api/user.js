@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  console.log(process.env.VUE_APP_BASE_API)
+  // console.log(process.env.VUE_APP_BASE_API)
   return request({
     url: '/user/login',
     method: 'post',
@@ -9,11 +9,11 @@ export function login(data) {
   })
 }
 
-export function getInfo(token) {
+export function getInfo(username) {
   return request({
     url: '/user/info',
     method: 'get',
-    params: { token }
+    params: { username }
   })
 }
 

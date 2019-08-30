@@ -4,6 +4,7 @@ import { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  login: '',
   name: '',
   avatar: ''
 }
@@ -17,6 +18,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_LOGIN: (state, login) => {
+    state.login = login
   }
 }
 
@@ -38,6 +42,7 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    // console.log(state)
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response

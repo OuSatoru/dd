@@ -28,7 +28,7 @@
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="passwordReal"
           :type="passwordType"
           placeholder="Password"
           name="password"
@@ -54,6 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
+import md5 from 'crypto-js/md5'
 
 export default {
   name: 'Login',
@@ -73,6 +74,7 @@ export default {
       }
     }
     return {
+      passwordReal: '12',
       loginForm: {
         username: 'admin',
         password: ''
@@ -92,6 +94,9 @@ export default {
         this.redirect = route.query && route.query.redirect
       },
       immediate: true
+    },
+    passwordReal() {
+      this.loginForm.password = this.calcPwd(this.passwordReal)
     }
   },
   methods: {
@@ -120,6 +125,9 @@ export default {
           return false
         }
       })
+    },
+    calcPwd(real) {
+      return md5(real).toString()
     }
   }
 }
