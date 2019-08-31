@@ -54,7 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import md5 from 'crypto-js/md5'
+import { calcPwd } from '@/utils/crypt'
 
 export default {
   name: 'Login',
@@ -74,7 +74,7 @@ export default {
       }
     }
     return {
-      passwordReal: '12',
+      passwordReal: '',
       loginForm: {
         username: 'admin',
         password: ''
@@ -96,7 +96,7 @@ export default {
       immediate: true
     },
     passwordReal() {
-      this.loginForm.password = this.calcPwd(this.passwordReal)
+      this.loginForm.password = calcPwd(this.passwordReal)
     }
   },
   methods: {
@@ -125,9 +125,6 @@ export default {
           return false
         }
       })
-    },
-    calcPwd(real) {
-      return md5(real).toString()
     }
   }
 }
