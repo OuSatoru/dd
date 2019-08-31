@@ -23,3 +23,7 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function f() {
+  
+}
