@@ -24,6 +24,10 @@ export function logout() {
   })
 }
 
-export function f() {
-  
+export function changePassword(data) {
+  return request({
+    url: '/user/changePassword',
+    method: 'post',
+    data
+  })
 }

@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, changePassword } from '@/api/user'
 import { getToken, setToken, getTokenUser, setTokenUser, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -86,6 +86,17 @@ const actions = {
       removeToken()
       resolve()
     })
+  },
+
+  // change password
+  changePassword({ commit }, pwdInfo) {
+    return new Promise(((resolve, reject) => {
+      changePassword(pwdInfo).then(() => {
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    }))
   }
 }
 
