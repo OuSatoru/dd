@@ -54,7 +54,7 @@
 
 <script>
 import { validUsername } from '@/utils/validate'
-import { calcPwd } from '@/utils/crypt'
+import { calcPwd } from '../../utils/crypt'
 
 export default {
   name: 'Login',

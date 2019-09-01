@@ -4,7 +4,7 @@
     <div class="app-container">
       <el-form ref="form" :model="form" label-width="120px">
         <el-form-item label="用户名">
-          <el-input v-model="form.loginID" />
+          <el-input v-model="form.loginID" :disabled="true" />
         </el-form-item>
         <el-form-item label="原密码">
           <el-input v-model="oPwdReal" />
@@ -13,7 +13,7 @@
           <el-input v-model="nPwdReal" />
         </el-form-item>
         <el-form-item label="确认密码">
-          <el-input />
+          <el-input v-model="nPwdReal2" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">修改</el-button>
@@ -26,6 +26,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { calcPwd } from '@/utils/crypt'
+import { getTokenUser } from '../../utils/auth'
 
 export default {
   name: 'Dashboard',
@@ -33,8 +34,9 @@ export default {
     return {
       oPwdReal: '',
       nPwdReal: '',
+      nPwdReal2: '',
       form: {
-        loginID: '',
+        loginID: getTokenUser(),
         oPassword: '',
         nPassword: ''
       }
@@ -55,7 +57,16 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$message('submit!')
+      if (this.nPwdReal !== this.nPwdReal2) {
+        this.$message({
+          message: '密码不一致！',
+          type: 'warning'
+        })
+        return
+      }
+      this.$store.dispatch('user/changePassword', this.form).then(response => {
+        console.log(response)
+      })
     }
   }
 }

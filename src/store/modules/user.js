@@ -90,13 +90,13 @@ const actions = {
 
   // change password
   changePassword({ commit }, pwdInfo) {
-    return new Promise(((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       changePassword(pwdInfo).then(() => {
         resolve()
       }).catch(error => {
         reject(error)
       })
-    }))
+    })
   }
 }
 
