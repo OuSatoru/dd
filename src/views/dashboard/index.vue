@@ -7,13 +7,13 @@
           <el-input v-model="form.loginID" :disabled="true" />
         </el-form-item>
         <el-form-item label="原密码">
-          <el-input v-model="oPwdReal" />
+          <el-input v-model="oPwdReal" type="password" />
         </el-form-item>
         <el-form-item label="新密码">
-          <el-input v-model="nPwdReal" />
+          <el-input v-model="nPwdReal" type="password" />
         </el-form-item>
         <el-form-item label="确认密码">
-          <el-input v-model="nPwdReal2" />
+          <el-input v-model="nPwdReal2" type="password" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">修改</el-button>
@@ -27,6 +27,7 @@
 import { mapGetters } from 'vuex'
 import { calcPwd } from '@/utils/crypt'
 import { getTokenUser } from '../../utils/auth'
+import { changePassword } from '../../api/user'
 
 export default {
   name: 'Dashboard',
@@ -64,9 +65,9 @@ export default {
         })
         return
       }
-      this.$store.dispatch('user/changePassword', this.form).then(response => {
-        console.log(response)
-      })
+      changePassword(this.form).then(response => {
+        this.$message(response.message)
+      }).catch()
     }
   }
 }

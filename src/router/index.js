@@ -56,23 +56,75 @@ export const constantRoutes = [
   },
 
   {
-    path: '/example',
+    path: '/userManage',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
+    redirect: '/userManage/teachers',
+    name: '人员管理',
+    meta: { title: '人员管理', icon: 'example' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
+        path: 'admins',
+        name: '管理员管理',
         component: () => import('../views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        meta: { title: '管理员管理', icon: 'table' }
       },
       {
-        path: 'tree',
+        path: 'grades',
         name: 'Tree',
         component: () => import('../views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        meta: { title: '年级长管理', icon: 'tree' }
+      },
+      {
+        path: 'lessons',
+        name: 'Tree',
+        component: () => import('../views/tree/index'),
+        meta: { title: '备课组长管理', icon: 'tree' }
+      },
+      {
+        path: 'classes',
+        name: 'Tree',
+        component: () => import('../views/tree/index'),
+        meta: { title: '班主任管理', icon: 'tree' }
+      },
+      {
+        path: 'teachers',
+        name: 'Tree',
+        component: () => import('../views/tree/index'),
+        meta: { title: '任课教师管理', icon: 'tree' }
+      }
+    ]
+  },
+
+  {
+    path: '/exam',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Exam',
+        component: () => import('../views/form/index'),
+        meta: { title: '考试管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/stats',
+    component: Layout,
+    name: 'Stats',
+    meta: { title: '成绩统计', icon: 'example' },
+    children: [
+      {
+        path: 'index',
+        name: 'Stats',
+        component: () => import('../views/form/index'),
+        meta: { title: '', icon: 'form' }
+      },
+      {
+        path: 'index',
+        name: 'Stats',
+        component: () => import('../views/form/index'),
+        meta: { title: '', icon: 'form' }
       }
     ]
   },
