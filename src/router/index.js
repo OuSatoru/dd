@@ -66,31 +66,37 @@ export const constantRoutes = [
         path: 'admins',
         name: '管理员管理',
         component: () => import('../views/table/index'),
-        meta: { title: '管理员管理', icon: 'table' }
+        meta: { roles: ['admin'], title: '管理员管理', icon: 'table' }
       },
       {
         path: 'grades',
         name: 'Tree',
         component: () => import('../views/tree/index'),
-        meta: { title: '年级长管理', icon: 'tree' }
+        meta: { roles: ['admin'], title: '年级长管理', icon: 'tree' }
       },
       {
         path: 'lessons',
         name: 'Tree',
         component: () => import('../views/tree/index'),
-        meta: { title: '备课组长管理', icon: 'tree' }
+        meta: { roles: ['admin', 'grade'], title: '备课组长管理', icon: 'tree' }
       },
       {
         path: 'classes',
         name: 'Tree',
         component: () => import('../views/tree/index'),
-        meta: { title: '班主任管理', icon: 'tree' }
+        meta: { roles: ['grade'], title: '班主任管理', icon: 'tree' }
       },
       {
         path: 'teachers',
         name: 'Tree',
         component: () => import('../views/tree/index'),
-        meta: { title: '任课教师管理', icon: 'tree' }
+        meta: { roles: ['grade'], title: '任课教师管理', icon: 'tree' }
+      },
+      {
+        path: 'students',
+        name: 'Tree',
+        component: () => import('../views/tree/index'),
+        meta: { roles: ['grade'], title: '学生管理', icon: 'tree' }
       }
     ]
   },
@@ -103,7 +109,20 @@ export const constantRoutes = [
         path: 'index',
         name: 'Exam',
         component: () => import('../views/form/index'),
-        meta: { title: '考试管理', icon: 'form' }
+        meta: { roles: ['grade', 'class', 'teacher'], title: '考试管理', icon: 'form' }
+      }
+    ]
+  },
+
+  {
+    path: '/input',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Input',
+        component: () => import('../views/form/index'),
+        meta: { roles: ['lesson', 'class', 'teacher'], title: '成绩录入', icon: 'form' }
       }
     ]
   },
@@ -115,16 +134,22 @@ export const constantRoutes = [
     meta: { title: '成绩统计', icon: 'example' },
     children: [
       {
-        path: 'index',
+        path: 'asClass',
         name: 'Stats',
         component: () => import('../views/form/index'),
-        meta: { title: '', icon: 'form' }
+        meta: { roles: ['grade', 'lesson', 'class'], title: '查看各班成绩', icon: 'form' }
       },
       {
-        path: 'index',
+        path: 'asGrade',
         name: 'Stats',
         component: () => import('../views/form/index'),
-        meta: { title: '', icon: 'form' }
+        meta: { roles: ['grade', 'lesson'], title: '年级年绩分析', icon: 'form' }
+      },
+      {
+        path: 'asStudent',
+        name: 'Stats',
+        component: () => import('../views/form/index'),
+        meta: { roles: ['grade', 'lesson', 'class', 'teacher'], title: '单个学生成绩', icon: 'form' }
       }
     ]
   },
