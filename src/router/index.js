@@ -65,37 +65,37 @@ export const constantRoutes = [
       {
         path: 'admins',
         name: '管理员管理',
-        component: () => import('../views/table/index'),
+        component: () => import('../views/table/users'),
         meta: { roles: ['admin'], title: '管理员管理', icon: 'table' }
       },
       {
         path: 'grades',
         name: 'Tree',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/table/users'),
         meta: { roles: ['admin'], title: '年级长管理', icon: 'tree' }
       },
       {
         path: 'lessons',
         name: 'Tree',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/table/users'),
         meta: { roles: ['admin', 'grade'], title: '备课组长管理', icon: 'tree' }
       },
       {
         path: 'classes',
         name: 'Tree',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/table/users'),
         meta: { roles: ['grade'], title: '班主任管理', icon: 'tree' }
       },
       {
         path: 'teachers',
         name: 'Tree',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/table/users'),
         meta: { roles: ['grade'], title: '任课教师管理', icon: 'tree' }
       },
       {
         path: 'students',
         name: 'Tree',
-        component: () => import('../views/tree/index'),
+        component: () => import('../views/table/users'),
         meta: { roles: ['grade'], title: '学生管理', icon: 'tree' }
       }
     ]
