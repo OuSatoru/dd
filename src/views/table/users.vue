@@ -140,6 +140,8 @@ import { fetchUsers, createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import { getToken } from '../../utils/auth'
+import { levelLabelNum, tokenTrim } from '../../utils/idMap'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -180,8 +182,6 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        importance: undefined,
-        title: undefined,
         type: undefined,
         sort: '+id'
       },
@@ -216,6 +216,8 @@ export default {
     }
   },
   created() {
+    const token = getToken()
+    this.listQuery.type = levelLabelNum(tokenTrim(token))
     this.getList()
   },
   methods: {
