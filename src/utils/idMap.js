@@ -32,6 +32,6 @@ export function tokenTrim(token) {
 
 export function levelLabelNum(label) {
   return levelMap.filter(a => {
-    return a.levelLabel !== label
+    return a.levelLabel === label
   })[0].id
 }

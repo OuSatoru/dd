@@ -24,22 +24,22 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="登录名" prop="id" sortable="custom" align="center" width="150px" :class-name="getSortClass('id')">
+      <el-table-column label="登录名" prop="login" sortable="custom" align="center" width="150px" :class-name="getSortClass('id')">
         <template slot-scope="scope">
           <span>{{ scope.row.login }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" width="150px" align="center">
+      <el-table-column label="姓名" prop="name" width="150px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学科" min-width="150px">
+      <el-table-column label="学科" prop="subject_name" min-width="150px">
         <template slot-scope="{scope}">
           <span>{{ scope.row.subject_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="班级" width="110px" align="center">
+      <el-table-column label="班级" prop="class_name" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.class_name }}</span>
         </template>
@@ -216,6 +216,7 @@ export default {
         this.list = response.data.items
         this.total = response.data.total
 
+        console.log(this.list)
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
