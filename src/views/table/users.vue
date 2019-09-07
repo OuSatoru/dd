@@ -34,8 +34,8 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学科" prop="subject_name" min-width="150px">
-        <template slot-scope="{scope}">
+      <el-table-column label="学科" prop="subjectName" width="110px" align="center">
+        <template slot-scope="scope">
           <span>{{ scope.row.subjectName }}</span>
         </template>
       </el-table-column>
@@ -49,9 +49,9 @@
           <span>{{ scope.row.levelName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" width="150px" align="center">
+      <el-table-column label="创建时间" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建人员" width="110px" align="center">
@@ -59,7 +59,7 @@
           <span>{{ scope.row.createUser }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
