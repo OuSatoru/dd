@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.login" placeholder="登录名" style="width: 200px;" class="filter-item"/>
+      <el-input v-model="listQuery.login" placeholder="登录名" style="width: 200px;" class="filter-item" />
       <el-input v-model="listQuery.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
@@ -36,27 +36,27 @@
       </el-table-column>
       <el-table-column label="学科" prop="subject_name" min-width="150px">
         <template slot-scope="{scope}">
-          <span>{{ scope.row.subject_name }}</span>
+          <span>{{ scope.row.subjectName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="班级" prop="class_name" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.class_name }}</span>
+          <span>{{ scope.row.className }}</span>
         </template>
       </el-table-column>
       <el-table-column label="角色" width="80px">
         <template slot-scope="scope">
-          <span>{{ scope.row.level_name }}</span>
+          <span>{{ scope.row.levelName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.create_time | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
+          <span>{{ scope.row.createTime | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="创建人员" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.create_user }}</span>
+          <span>{{ scope.row.createUser }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="230" class-name="small-padding fixed-width">
