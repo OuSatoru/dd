@@ -44,7 +44,7 @@
           <span>{{ scope.row.className }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" width="80px">
+      <el-table-column label="角色" width="80px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.levelName }}</span>
         </template>
@@ -78,35 +78,34 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="Type" prop="type">
-          <el-select v-model="temp.type" class="filter-item" placeholder="Please select">
-            <el-option v-for="item in calendarTypeOptions" :key="item.key" :label="item.display_name" :value="item.key" />
-          </el-select>
+        <el-form-item label="用户名" prop="login">
+          <el-input v-model="temp.login" placeholder="请输入用户名" />
         </el-form-item>
-        <el-form-item label="Date" prop="timestamp">
-          <el-date-picker v-model="temp.timestamp" type="datetime" placeholder="Please pick a date" />
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="temp.name" placeholder="请输入姓名" />
         </el-form-item>
-        <el-form-item label="Title" prop="title">
-          <el-input v-model="temp.title" />
-        </el-form-item>
-        <el-form-item label="Status">
-          <el-select v-model="temp.status" class="filter-item" placeholder="Please select">
+        <el-form-item label="科目" prop="subject">
+          <el-select v-model="temp.subject" class="filter-item" placeholder="请选择科目">
             <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Imp">
-          <el-rate v-model="temp.importance" :colors="['#99A9BF', '#F7BA2A', '#FF9900']" :max="3" style="margin-top:8px;" />
+        <el-form-item label="班级" prop="classNum">
+          <el-select v-model="temp.classNum" class="filter-item" placeholder="请选择班级">
+            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+          </el-select>
         </el-form-item>
-        <el-form-item label="Remark">
-          <el-input v-model="temp.remark" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="Please input" />
+        <el-form-item label="角色" prop="level">
+          <el-select v-model="temp.level" class="filter-item" placeholder="请选择角色">
+            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
-          Cancel
+          取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
-          Confirm
+          确认
         </el-button>
       </div>
     </el-dialog>
@@ -128,7 +127,7 @@ import { fetchUsers, createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getToken } from '../../utils/auth'
+import { getToken, getTokenUser } from '../../utils/auth'
 import { levelLabelNum, tokenTrim } from '../../utils/idMap'
 
 const calendarTypeOptions = [
@@ -180,19 +179,24 @@ export default {
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       temp: {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        type: '',
-        status: 'published'
+        login: undefined,
+        name: undefined,
+        password: undefined,
+        passwordReal: undefined,
+        subject: undefined,
+        subjectName: undefined,
+        classNum: undefined,
+        className: undefined,
+        level: undefined,
+        levelName: undefined,
+        createTime: new Date(),
+        createUser: getTokenUser()
       },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
-        update: 'Edit',
-        create: 'Create'
+        update: '编辑',
+        create: '新建'
       },
       dialogPvVisible: false,
       pvData: [],
