@@ -13,15 +13,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="考试年级">
-        <el-select v-model="form.grade" placeholder="请选择考试科目">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
+        <el-select v-model="form.grade" placeholder="请选择考试科目" @change="getClass">
+          <el-option v-for="grad in grades" :key="grad" :label="grad" :value="grad" />
         </el-select>
       </el-form-item>
       <el-form-item label="考试班级">
-        <el-select v-model="form.classes" placeholder="请选择考试科目">
-          <el-option label="Zone one" value="shanghai" />
-          <el-option label="Zone two" value="beijing" />
+        <el-select v-model="form.selectedClasses" placeholder="请选择考试科目" @change="form.classes = JSON.stringify(form.selectedClasses)">
+          <el-option v-for="cla in classes" :key="cla.id" :label="cla.className" :value="cla.id" />
         </el-select>
       </el-form-item>
       <el-form-item>
@@ -34,13 +32,15 @@
 
 <script>
 import { getTokenUser } from '../../utils/auth'
-import { getSubjects } from '../../api/examAdd'
+import { getClasses, getSubjects } from '../../api/examAdd'
 
 export default {
   data() {
     return {
       subjects: [],
-      grades: [],
+      grades: ['一', '二', '三', '四', '五', '六'],
+      classes: [],
+      selectedClasses: [],
       form: {
         examName: '',
         createUser: getTokenUser(),
@@ -57,6 +57,11 @@ export default {
     getSubject() {
       getSubjects().then(response => {
         this.subjects = response.data
+      })
+    },
+    getClass() {
+      getClasses(this.form.grade).then(response => {
+        this.classes = response.data
       })
     },
     onSubmit() {

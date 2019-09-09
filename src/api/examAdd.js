@@ -14,3 +14,11 @@ export function getSubjects() {
     method: 'get'
   })
 }
+
+export function getClasses(grade) {
+  return request({
+    url: '/classes',
+    method: 'get',
+    params: { grade }
+  })
+}
