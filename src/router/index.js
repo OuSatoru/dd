@@ -108,7 +108,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Exam',
-        component: () => import('../views/form/index'),
+        component: () => import('../views/form/exam'),
         meta: { roles: ['grade', 'class', 'teacher'], title: '考试管理', icon: 'form' }
       }
     ]
