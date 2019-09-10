@@ -121,7 +121,7 @@ export const constantRoutes = [
       {
         path: 'index',
         name: 'Input',
-        component: () => import('../views/form/index'),
+        component: () => import('../views/table/input'),
         meta: { roles: ['lesson', 'class', 'teacher'], title: '成绩录入', icon: 'form' }
       }
     ]
