@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="考试班级">
-        <el-select v-model="form.selectedClasses" placeholder="请选择考试科目" @change="form.classes = JSON.stringify(form.selectedClasses)">
+        <el-select v-model="selectedClasses" placeholder="请选择考试科目" multiple @change="form.classes = JSON.stringify(selectedClasses)">
           <el-option v-for="cla in classes" :key="cla.id" :label="cla.className" :value="cla.id" />
         </el-select>
       </el-form-item>
@@ -32,7 +32,7 @@
 
 <script>
 import { getTokenUser } from '../../utils/auth'
-import { getClasses, getSubjects } from '../../api/examAdd'
+import { examAdd, getClasses, getSubjects } from '../../api/examAdd'
 
 export default {
   data() {
@@ -64,8 +64,21 @@ export default {
         this.classes = response.data
       })
     },
+    addExam() {
+      examAdd(this.form).then(response => {
+        if (response.code !== 20000) {
+          this.$message({
+            message: '添加失败!',
+            type: 'error'
+          })
+        } else {
+          this.$message('添加成功!')
+        }
+      })
+    },
     onSubmit() {
-      this.$message('submit!')
+      this.addExam()
+      // this.$message('submit!')
     },
     onCancel() {
       this.$message({
