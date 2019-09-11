@@ -22,3 +22,10 @@ export function getClasses(grade) {
     params: { grade }
   })
 }
+
+export function getExams() {
+  return request({
+    url: '/exams',
+    method: 'get'
+  })
+}

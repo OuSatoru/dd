@@ -2,13 +2,14 @@
   <div class="app-container">
 
     <div class="filter-container">
-      <el-input v-model="listQuery.login" placeholder="登录名" style="width: 200px;" class="filter-item" />
-      <el-input v-model="listQuery.name" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.examID" placeholder="考试名" @change="filterClass">
+        <el-option v-for="exam in exams" :key="exam.id" :value="exam.id" :label="exam.examName" />
+      </el-select>
+      <el-select v-model="listQuery.classNum" placeholder="班级名">
+        <el-option v-for="cl in filteredClasses" :key="cl.id" :value="cl.id" :label="cl.className" />
+      </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
-      </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        新增
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         导出
@@ -25,39 +26,39 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="登录名" prop="login" sortable="custom" align="center" width="150px" :class-name="getSortClass('id')">
+      <el-table-column label="学号" prop="stuNum" sortable="custom" align="center" width="150px" :class-name="getSortClass('id')">
         <template slot-scope="scope">
-          <span>{{ scope.row.login }}</span>
+          <span>{{ scope.row.stuNum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="name" width="150px" align="center">
+      <el-table-column label="姓名" prop="stuName" width="150px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <span>{{ scope.row.stuName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="学科" prop="subjectName" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.subjectName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="班级" prop="class_name" width="110px" align="center">
+      <el-table-column label="班级" prop="className" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.className }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色" width="80px" align="center">
+      <el-table-column label="考试名" prop="examName" min-width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.levelName }}</span>
+          <span>{{ scope.row.examName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" min-width="180px" align="center">
+      <el-table-column label="学科" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.SubjName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="创建人员" width="110px" align="center">
+      <el-table-column label="分数" width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createUser }}</span>
+          <span>{{ scope.row.score }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="缺席标志" width="110px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.leaveFlag }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
@@ -81,12 +82,13 @@
 </template>
 
 <script>
-import { fetchUsers, createUser, updateUser } from '@/api/userManage'
+import { createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import { getToken, getTokenUser } from '../../utils/auth'
-import { levelLabelNum, tokenTrim } from '../../utils/idMap'
+import { getTokenUser } from '../../utils/auth'
+import { scoreList } from '../../api/input'
+import { getClasses, getExams } from '../../api/examAdd'
 
 export default {
   name: 'ComplexTable',
@@ -106,14 +108,15 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      exams: null,
+      classes: null,
+      filteredClasses: null,
+      selectedClass: null,
       total: 0,
       listLoading: true,
       listQuery: {
-        page: 1,
-        limit: 20,
-        type: undefined,
-        login: undefined,
-        name: undefined
+        classNum: undefined,
+        examID: undefined
       },
       importanceOptions: [1, 2, 3],
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -150,26 +153,38 @@ export default {
     }
   },
   created() {
-    const token = getToken()
-    this.listQuery.type = levelLabelNum(tokenTrim(token))
-    this.getList()
+    this.getExam()
+    this.getClazz()
   },
   methods: {
     getList() {
       this.listLoading = true
-      fetchUsers(this.listQuery).then(response => {
+      scoreList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
 
-        console.log(this.list)
+        // console.log(this.list)
         // Just to simulate the time of the request
         setTimeout(() => {
           this.listLoading = false
         }, 1.5 * 1000)
       })
     },
+    getExam() {
+      getExams().then(response => {
+        this.exams = response.data
+      })
+    },
+    getClazz() {
+      getClasses().then(response => {
+        this.classes = response.data
+      })
+    },
+    filterClass() {
+      const classIDs = JSON.parse(this.exams.filter(e => { return e.id === this.listQuery.examID })[0].classes)
+      this.filteredClasses = this.classes.filter(c => { return classIDs.indexOf(c.id) >= 0 })
+    },
     handleFilter() {
-      this.listQuery.page = 1
       this.getList()
     },
     handleModifyStatus(row, status) {
