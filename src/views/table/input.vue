@@ -48,7 +48,7 @@
       </el-table-column>
       <el-table-column label="学科" width="80px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.SubjName }}</span>
+          <span>{{ scope.row.subjName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="分数" width="180px" align="center">
@@ -76,8 +76,6 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
   </div>
 </template>
 
@@ -85,14 +83,13 @@
 import { createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getTokenUser } from '../../utils/auth'
 import { scoreList } from '../../api/input'
 import { getClasses, getExams } from '../../api/examAdd'
 
 export default {
   name: 'ComplexTable',
-  components: { Pagination },
+  // components: { Pagination },
   directives: { waves },
   filters: {
     statusFilter(status) {
@@ -113,7 +110,7 @@ export default {
       filteredClasses: null,
       selectedClass: null,
       total: 0,
-      listLoading: true,
+      listLoading: false,
       listQuery: {
         classNum: undefined,
         examID: undefined
