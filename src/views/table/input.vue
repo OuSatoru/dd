@@ -88,6 +88,7 @@ import { createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import { scoreList } from '../../api/input'
+import axios from 'axios'
 import { getClasses, getExams } from '../../api/examAdd'
 
 export default {
@@ -192,11 +193,16 @@ export default {
       })
     },
     confirmEdit(row) {
-      row.edit = true
       row.originalScore = row.score
-      this.$message({
-        message: 'The title has been edited',
-        type: 'success'
+      // updateStatOne(row).then(response => {
+      //   row.edit = true
+      //   this.$message({
+      //     message: '更新成功',
+      //     type: 'success'
+      //   })
+      // })
+      axios.post('http://127.0.0.1:8080/mock/input/updateOne', row).then(resp => {
+        console.log(resp)
       })
       console.log(this.list)
     },

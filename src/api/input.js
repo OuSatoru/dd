@@ -8,3 +8,19 @@ export function scoreList(query) {
   })
 }
 
+export function updateStatOne(row) {
+  console.log(row)
+  return request({
+    url: '/input/updateOne',
+    method: 'post',
+    row
+  })
+}
+
+export function updateStatAll(rows) {
+  return request({
+    url: '/input/updateAll',
+    method: 'post',
+    rows
+  })
+}
