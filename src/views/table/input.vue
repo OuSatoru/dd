@@ -51,27 +51,31 @@
           <span>{{ scope.row.subjName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="分数" width="180px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.score }}</span>
+      <el-table-column label="分数" min-width="180px">
+        <template slot-scope="{row}">
+          <template v-if="!row.edit">
+            <el-input v-model="row.score" type="number" min="0.0" max="100.0" step="0.1" class="edit-input" size="small" />
+            <el-button
+              class="cancel-btn"
+              size="small"
+              icon="el-icon-refresh"
+              type="warning"
+              @click="cancelEdit(row)"
+            />
+            <el-button
+              class="confirm-btn"
+              type="success"
+              size="small"
+              icon="el-icon-circle-check-outline"
+              @click="confirmEdit(row)"
+            />
+          </template>
+          <span v-else>{{ row.score }}</span>
         </template>
       </el-table-column>
       <el-table-column label="缺席标志" width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.leaveFlag }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" align="center" width="250" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button v-if="row.status!=='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
-            重置密码
-          </el-button>
-          <el-button v-if="row.status!=='deleted'" size="mini" type="danger" @click="handleModifyStatus(row,'deleted')">
-            删除
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -183,6 +187,28 @@ export default {
     },
     handleFilter() {
       this.getList()
+    },
+    checkCanEdit(row) {
+      if (row.score || row.score === 0) {
+        row.edit = true
+      }
+      console.log(row.edit)
+    },
+    cancelEdit(row) {
+      row.title = row.originalTitle
+      row.edit = false
+      this.$message({
+        message: 'The title has been restored to the original value',
+        type: 'warning'
+      })
+    },
+    confirmEdit(row) {
+      row.edit = false
+      row.originalTitle = row.title
+      this.$message({
+        message: 'The title has been edited',
+        type: 'success'
+      })
     },
     handleModifyStatus(row, status) {
       this.$message({
@@ -319,3 +345,19 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .edit-input {
+    padding-right: 100px;
+  }
+  .confirm-btn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+  }
+  .cancel-btn {
+    position: absolute;
+    right: 62px;
+    top: 10px;
+  }
+</style>
