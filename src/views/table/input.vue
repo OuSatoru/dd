@@ -54,7 +54,7 @@
       <el-table-column label="分数" min-width="180px">
         <template slot-scope="{row}">
           <template v-if="!row.edit">
-            <el-input v-model="row.score" type="number" min="0.0" max="100.0" step="0.1" class="edit-input" size="small" />
+            <el-input v-model.number="row.score" type="number" min="0.0" max="100.0" step="0.1" class="edit-input" size="small" />
             <el-button
               class="cancel-btn"
               size="small"
@@ -87,7 +87,6 @@
 import { createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
-import { getTokenUser } from '../../utils/auth'
 import { scoreList } from '../../api/input'
 import { getClasses, getExams } from '../../api/examAdd'
 
@@ -123,20 +122,6 @@ export default {
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
-      temp: {
-        login: undefined,
-        name: undefined,
-        password: undefined,
-        passwordReal: undefined,
-        subject: undefined,
-        subjectName: undefined,
-        classNum: undefined,
-        className: undefined,
-        level: undefined,
-        levelName: undefined,
-        createTime: new Date(),
-        createUser: getTokenUser()
-      },
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -163,6 +148,10 @@ export default {
       scoreList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
+        this.list.map(l => {
+          l.originalScore = l.score
+          return l
+        })
 
         // console.log(this.list)
         // Just to simulate the time of the request
@@ -195,20 +184,21 @@ export default {
       console.log(row.edit)
     },
     cancelEdit(row) {
-      row.title = row.originalTitle
-      row.edit = false
+      row.score = row.originalScore
+      row.edit = true
       this.$message({
-        message: 'The title has been restored to the original value',
+        message: '未改变成绩值',
         type: 'warning'
       })
     },
     confirmEdit(row) {
-      row.edit = false
-      row.originalTitle = row.title
+      row.edit = true
+      row.originalScore = row.score
       this.$message({
         message: 'The title has been edited',
         type: 'success'
       })
+      console.log(this.list)
     },
     handleModifyStatus(row, status) {
       this.$message({
