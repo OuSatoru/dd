@@ -12,7 +12,7 @@
         查找
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        导出
+        提交
       </el-button>
     </div>
 
@@ -75,7 +75,9 @@
       </el-table-column>
       <el-table-column label="缺席标志" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.leaveFlag }}</span>
+          <el-select v-model.number="scope.row.leaveFlag">
+            <el-option v-for="item in lflags" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </template>
       </el-table-column>
     </el-table>
@@ -122,6 +124,7 @@ export default {
       importanceOptions: [1, 2, 3],
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
+      lflags: [{ value: 0, label: '未缺席' }, { value: 1, label: '缺席' }],
       showReviewer: false,
       dialogFormVisible: false,
       dialogStatus: '',
