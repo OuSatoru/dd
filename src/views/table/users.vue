@@ -64,7 +64,7 @@
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <el-button v-if="row.status!=='draft'" size="mini" @click="handleModifyStatus(row,'draft')">
+          <el-button v-if="row.status!=='draft'" size="mini" @click="handleResetPwd(row)">
             重置密码
           </el-button>
           <el-button v-if="row.status!=='deleted'" size="mini" type="danger" @click="handleModifyStatus(row,'deleted')">
@@ -129,6 +129,8 @@ import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 import { getToken, getTokenUser } from '../../utils/auth'
 import { levelLabelNum, tokenTrim } from '../../utils/idMap'
+import { resetPassword } from '../../api/user'
+import { calcPwd } from '../../utils/crypt'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -331,6 +333,11 @@ export default {
       })
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
+    },
+    handleResetPwd(row) {
+      resetPassword({ loginID: row.login, nPassword: calcPwd('123456') }).then(response => {
+        this.$message(response.message)
+      })
     },
     handleDownload() {
       this.downloadLoading = true

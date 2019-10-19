@@ -31,3 +31,11 @@ export function changePassword(data) {
     data
   })
 }
+
+export function resetPassword(data) {
+  return request({
+    url: '/user/resetPassword',
+    method: 'post',
+    data
+  })
+}
