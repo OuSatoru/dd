@@ -67,7 +67,7 @@
           <el-button v-if="row.status!=='draft'" size="mini" @click="handleResetPwd(row)">
             重置密码
           </el-button>
-          <el-button v-if="row.status!=='deleted'" size="mini" type="danger" @click="handleModifyStatus(row,'deleted')">
+          <el-button v-if="row.status!=='deleted'" size="mini" type="danger" @click="handleDelete(row)">
             删除
           </el-button>
         </template>
@@ -86,17 +86,17 @@
         </el-form-item>
         <el-form-item label="科目" prop="subject">
           <el-select v-model="temp.subject" class="filter-item" placeholder="请选择科目">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+            <el-option v-for="item in subjects" :key="item.id" :label="item.subjName" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="班级" prop="classNum">
           <el-select v-model="temp.classNum" class="filter-item" placeholder="请选择班级">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+            <el-option v-for="item in classes" :key="item.id" :label="item.className" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="角色" prop="level">
           <el-select v-model="temp.level" class="filter-item" placeholder="请选择角色">
-            <el-option v-for="item in statusOptions" :key="item" :label="item" :value="item" />
+            <el-option v-for="item in levels" :key="item.id" :label="item.levelName" :value="item.id" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -123,7 +123,6 @@
 </template>
 
 <script>
-import { fetchUsers, createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
@@ -131,6 +130,8 @@ import { getToken, getTokenUser } from '../../utils/auth'
 import { levelLabelNum, tokenTrim } from '../../utils/idMap'
 import { resetPassword } from '../../api/user'
 import { calcPwd } from '../../utils/crypt'
+import { fetchUsers, createUser, updateUser, deleteUser } from '../../api/userManage'
+import { getClasses, getSubjects } from '../../api/examAdd'
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -183,15 +184,11 @@ export default {
       temp: {
         login: undefined,
         name: undefined,
-        password: undefined,
-        passwordReal: undefined,
+        password: calcPwd('123456'),
         subject: undefined,
-        subjectName: undefined,
         classNum: undefined,
-        className: undefined,
         level: undefined,
-        levelName: undefined,
-        createTime: new Date(),
+        createTime: new Date().toISOString(),
         createUser: getTokenUser()
       },
       dialogFormVisible: false,
@@ -207,15 +204,33 @@ export default {
         timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
         title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      subjects: [],
+      grades: ['一', '二', '三', '四', '五', '六'],
+      classes: [],
+      levels: [{ id: 0, levelName: '管理员' }, { id: 1, levelName: '年级长' }]
     }
   },
   created() {
     const token = getToken()
     this.listQuery.type = levelLabelNum(tokenTrim(token))
     this.getList()
+    this.getSubject()
+    this.getClass()
   },
   methods: {
+    getSubject() {
+      getSubjects().then(response => {
+        this.subjects = response.data
+      })
+    },
+    getClass() {
+      this.grades.forEach(grade => {
+        getClasses(grade).then(response => {
+          this.classes.push(...response.data)
+        })
+      })
+    },
     getList() {
       this.listLoading = true
       fetchUsers(this.listQuery).then(response => {
@@ -256,13 +271,14 @@ export default {
     },
     resetTemp() {
       this.temp = {
-        id: undefined,
-        importance: 1,
-        remark: '',
-        timestamp: new Date(),
-        title: '',
-        status: 'published',
-        type: ''
+        login: undefined,
+        name: undefined,
+        password: calcPwd('123456'),
+        subject: undefined,
+        classNum: undefined,
+        level: undefined,
+        createTime: new Date().toISOString(),
+        createUser: getTokenUser()
       }
     },
     handleCreate() {
@@ -276,11 +292,9 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          this.temp.author = 'vue-element-admin'
+          console.log(this.temp)
           createUser(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
+            this.getList()
             this.$notify({
               title: 'Success',
               message: 'Created Successfully',
@@ -325,11 +339,17 @@ export default {
       })
     },
     handleDelete(row) {
-      this.$notify({
-        title: 'Success',
-        message: 'Delete Successfully',
-        type: 'success',
-        duration: 2000
+      if (row.login === 'admin') {
+        this.$message('不能删除admin用户')
+        return
+      }
+      deleteUser({ loginID: row.login }).then(response => {
+        this.$notify({
+          title: '成功',
+          message: response.message,
+          type: 'success',
+          duration: 2000
+        })
       })
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
