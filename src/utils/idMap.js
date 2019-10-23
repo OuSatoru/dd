@@ -35,3 +35,7 @@ export function levelLabelNum(label) {
     return a.levelLabel === label
   })[0].id
 }
+
+export function levelsMap() {
+  return levelMap
+}

@@ -58,36 +58,36 @@ export const constantRoutes = [
   {
     path: '/userManage',
     component: Layout,
-    redirect: '/userManage/teachers',
+    redirect: '/userManage/teacher',
     name: '人员管理',
     meta: { title: '人员管理', icon: 'example' },
     children: [
       {
-        path: 'admins',
+        path: 'admin',
         name: '管理员管理',
         component: () => import('../views/table/users'),
         meta: { roles: ['admin'], title: '管理员管理', icon: 'table' }
       },
       {
-        path: 'grades',
+        path: 'grade',
         name: 'Tree',
         component: () => import('../views/table/users'),
         meta: { roles: ['admin'], title: '年级长管理', icon: 'tree' }
       },
       {
-        path: 'lessons',
+        path: 'lesson',
         name: 'Tree',
         component: () => import('../views/table/users'),
         meta: { roles: ['admin', 'grade'], title: '备课组长管理', icon: 'tree' }
       },
       {
-        path: 'classes',
+        path: 'class',
         name: 'Tree',
         component: () => import('../views/table/users'),
         meta: { roles: ['grade'], title: '班主任管理', icon: 'tree' }
       },
       {
-        path: 'teachers',
+        path: 'teacher',
         name: 'Tree',
         component: () => import('../views/table/users'),
         meta: { roles: ['grade'], title: '任课教师管理', icon: 'tree' }
@@ -95,7 +95,7 @@ export const constantRoutes = [
       {
         path: 'students',
         name: 'Tree',
-        component: () => import('../views/table/users'),
+        component: () => import('../views/table/students'),
         meta: { roles: ['grade'], title: '学生管理', icon: 'tree' }
       }
     ]
@@ -136,19 +136,19 @@ export const constantRoutes = [
       {
         path: 'asClass',
         name: 'Stats',
-        component: () => import('../views/form/index'),
+        component: () => import('../views/table/stats'),
         meta: { roles: ['grade', 'lesson', 'class'], title: '查看各班成绩', icon: 'form' }
       },
       {
         path: 'asGrade',
         name: 'Stats',
-        component: () => import('../views/form/index'),
+        component: () => import('../views/table/stats'),
         meta: { roles: ['grade', 'lesson'], title: '年级年绩分析', icon: 'form' }
       },
       {
         path: 'asStudent',
         name: 'Stats',
-        component: () => import('../views/form/index'),
+        component: () => import('../views/table/stats'),
         meta: { roles: ['grade', 'lesson', 'class', 'teacher'], title: '单个学生成绩', icon: 'form' }
       }
     ]
