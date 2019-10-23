@@ -9,7 +9,6 @@ export function scoreList(query) {
 }
 
 export function updateStatOne(row) {
-  console.log(row)
   return request({
     url: '/input/updateOne',
     method: 'post',
