@@ -7,3 +7,10 @@ export function examGradeList(query) {
     params: query
   })
 }
+
+export function getStudents() {
+  return request({
+    url: '/students',
+    method: 'get'
+  })
+}

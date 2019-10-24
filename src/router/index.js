@@ -148,7 +148,7 @@ export const constantRoutes = [
       {
         path: 'asStudent',
         name: 'Stats',
-        component: () => import('../views/table/stats'),
+        component: () => import('../views/table/stats_stu'),
         meta: { roles: ['grade', 'lesson', 'class', 'teacher'], title: '单个学生成绩', icon: 'form' }
       }
     ]

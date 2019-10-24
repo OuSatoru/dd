@@ -2,8 +2,8 @@
   <div class="app-container">
 
     <div class="filter-container">
-      <el-select v-model="listQuery.exam" placeholder="考试名">
-        <el-option v-for="exam in exams" :key="exam.id" :value="exam.id" :label="exam.examName" />
+      <el-select v-model="listQuery.student" placeholder="学生">
+        <el-option v-for="student in students" :key="student.id" :value="student.id" :label="student.stuDesc" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
@@ -65,8 +65,7 @@
 <script>
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
-import { getExams } from '../../api/examAdd'
-import { examGradeList } from '../../api/stat'
+import { examGradeList, getStudents } from '../../api/stat'
 
 export default {
   name: 'ComplexTable',
@@ -86,13 +85,13 @@ export default {
     return {
       tableKey: 0,
       list: null,
-      exams: null,
+      students: null,
       filteredClasses: null,
       selectedClass: null,
       total: 0,
       listLoading: false,
       listQuery: {
-        exam: undefined
+        student: undefined
       },
       importanceOptions: [1, 2, 3],
       sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
@@ -116,7 +115,7 @@ export default {
     }
   },
   created() {
-    this.getExam()
+    this.getStu()
   },
   methods: {
     getList() {
@@ -126,9 +125,9 @@ export default {
         this.listLoading = false
       })
     },
-    getExam() {
-      getExams().then(response => {
-        this.exams = response.data
+    getStu() {
+      getStudents().then(response => {
+        this.students = response.data
       })
     },
     handleFilter() {

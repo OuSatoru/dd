@@ -205,9 +205,12 @@ export default {
       //   })
       // })
       axios.post('http://127.0.0.1:8080/mock/input/updateOne', row).then(resp => {
-        console.log(resp)
+        this.$message({
+          message: row.stuName + '更新成功',
+          type: 'success'
+        })
       })
-      console.log(this.list)
+      // console.log(this.list)
     },
     handleModifyStatus(row, status) {
       this.$message({
