@@ -8,6 +8,14 @@ export function examGradeList(query) {
   })
 }
 
+export function examStuList(query) {
+  return request({
+    url: '/stat/examStuList',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getStudents() {
   return request({
     url: '/students',

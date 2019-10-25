@@ -3,7 +3,7 @@
 
     <div class="filter-container">
       <el-select v-model="listQuery.student" placeholder="学生">
-        <el-option v-for="student in students" :key="student.id" :value="student.id" :label="student.stuDesc" />
+        <el-option v-for="student in students" :key="student.stuid" :value="student.stuid" :label="student.stuName" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查找
@@ -22,14 +22,14 @@
       highlight-current-row
       style="width: 100%;"
     >
-      <el-table-column label="班级" prop="className" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.className }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="考试名" prop="examName" min-width="110px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.examName }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="所在班级" prop="className" width="110px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.className }}</span>
         </template>
       </el-table-column>
       <el-table-column label="学科" width="80px" align="center">
@@ -37,24 +37,14 @@
           <span>{{ scope.row.subjName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="平均分" min-width="180px" align="center">
+      <el-table-column label="分数" min-width="180px" align="center">
         <template slot-scope="scope">
-          <span>{{ fix2(scope.row.avg) }}</span>
+          <span>{{ scope.row.score }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="最高分" width="110px" align="center">
+      <el-table-column label="缺席标志" width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ fix2(scope.row.max) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="最低分" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ fix2(scope.row.min) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="及格率" width="110px" align="center">
-        <template slot-scope="scope">
-          <span>{{ percentage(scope.row.passrate) }}</span>
+          <span>{{ scope.row.leaveflag }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -65,7 +55,7 @@
 <script>
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
-import { examGradeList, getStudents } from '../../api/stat'
+import { examStuList, getStudents } from '../../api/stat'
 
 export default {
   name: 'ComplexTable',
@@ -86,8 +76,6 @@ export default {
       tableKey: 0,
       list: null,
       students: null,
-      filteredClasses: null,
-      selectedClass: null,
       total: 0,
       listLoading: false,
       listQuery: {
@@ -120,7 +108,7 @@ export default {
   methods: {
     getList() {
       this.listLoading = true
-      examGradeList(this.listQuery).then(response => {
+      examStuList(this.listQuery).then(response => {
         this.list = response.data
         this.listLoading = false
       })
