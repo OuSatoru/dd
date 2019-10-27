@@ -91,13 +91,13 @@ export const constantRoutes = [
         name: 'Tree',
         component: () => import('../views/table/users'),
         meta: { roles: ['grade'], title: '任课教师管理', icon: 'tree' }
-      },
-      {
-        path: 'students',
-        name: 'Tree',
-        component: () => import('../views/table/students'),
-        meta: { roles: ['grade'], title: '学生管理', icon: 'tree' }
       }
+      // {
+      //   path: 'students',
+      //   name: 'Tree',
+      //   component: () => import('../views/table/students'),
+      //   meta: { roles: ['grade'], title: '学生管理', icon: 'tree' }
+      // }
     ]
   },
 

@@ -9,7 +9,7 @@
         查找
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        提交
+        导出
       </el-button>
     </div>
 
@@ -64,7 +64,6 @@
 
 <script>
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import { getExams } from '../../api/examAdd'
 import { examGradeList } from '../../api/stat'
 
@@ -144,8 +143,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-          const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+          const tHeader = ['班级', '考试名', '学科', '平均分', '最高分', '最低分', '及格率']
+          const filterVal = ['className', 'examName', 'subjName', 'avg', 'max', 'min', 'passrate']
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
             header: tHeader,
@@ -157,8 +156,8 @@ export default {
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
+        if (j === 'passrate') {
+          return this.percentage(v[j])
         } else {
           return v[j]
         }

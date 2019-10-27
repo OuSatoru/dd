@@ -9,7 +9,7 @@
         查找
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        提交
+        导出
       </el-button>
     </div>
 
@@ -131,8 +131,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-          const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+          const tHeader = ['考试名', '所在班级', '学科', '分数', '缺席标志']
+          const filterVal = ['examName', 'className', 'subjName', 'score', 'leaveflag']
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
             header: tHeader,

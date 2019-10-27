@@ -12,7 +12,7 @@
         查找
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
-        提交
+        导出
       </el-button>
     </div>
 
@@ -88,7 +88,6 @@
 <script>
 import { createUser, updateUser } from '@/api/userManage'
 import waves from '@/directive/waves' // waves directive
-import { parseTime } from '@/utils'
 import { scoreList } from '../../api/input'
 import axios from 'axios'
 import { getClasses, getExams } from '../../api/examAdd'
@@ -316,8 +315,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['timestamp', 'title', 'type', 'importance', 'status']
-          const filterVal = ['timestamp', 'title', 'type', 'importance', 'status']
+          const tHeader = ['学号', '姓名', '班级', '考试名', '学科', '分数', '缺席标志']
+          const filterVal = ['stuNum', 'stuName', 'className', 'examName', 'subjName', 'score', 'leaveFlag']
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel({
             header: tHeader,
@@ -329,8 +328,8 @@ export default {
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
-          return parseTime(v[j])
+        if (j === 'leaveFlag') {
+          return (this.lflags.filter(f => { return f.value === v[j] }))[0].label
         } else {
           return v[j]
         }
